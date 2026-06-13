@@ -1,0 +1,96 @@
+%------------------------------------------------
+\section{Introduction}
+\begin{frame}{\hspace{3cm}}
+\centering
+
+\vspace{1.5cm}
+
+\begin{beamercolorbox}[sep=20pt,center,rounded=true,shadow=true]{title}
+    {\fontsize{20}{24}\selectfont \textbf{Introduction}}
+\end{beamercolorbox}
+
+\vspace{0.8cm}
+
+
+\vfill
+
+\end{frame}
+%------------------------------------------------
+\begin{frame}{Motivation}
+\begin{itemize}
+    \item \textbf{Parametric estimation}: Efficient when the model is correctly specified.
+    \item \textbf{Nonparametric estimation}: Flexible but converges at a slower rate.
+    \item Need for a unified framework that balances efficiency and robustness.
+    \item The semiparametric approach integrates both methodologies.
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Semiparametric Density Estimator}
+\begin{block}{Convex Combination of Densities}
+\begin{equation}
+    g(x,\pi) = \pi f(x,\hat{\theta}) + (1-\pi)\hat{f}(x), \qquad 0 \leq \pi \leq 1,
+\end{equation}
+\end{block}
+
+\begin{itemize}
+    \item $f(x,\hat{\theta})$: Parametric density with parameter estimated by maximum likelihood.
+    \item $\hat{f}(x)$: Nonparametric kernel density estimator.
+    \item $\pi$: Unknown mixing parameter estimated from the data.
+    \item Interpretation:
+    \begin{itemize}
+        \item $\pi \approx 1$ indicates a good parametric fit.
+        \item $\pi \approx 0$ favors the nonparametric estimate.
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Kernel Density Estimator}
+\begin{block}{Nonparametric Density}
+\begin{equation}
+    \hat{f}(x) = c_0 \sum_{i=1}^{n} K\!\left[c_1(x - x_i)\right],
+\end{equation}
+\end{block}
+
+\begin{itemize}
+    \item $K(\cdot)$: Kernel function.
+    \item $c_1$: Bandwidth (smoothing parameter).
+    \item $c_0$: Normalizing constant ensuring integration to one.
+    \item Provides flexibility without distributional assumptions.
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Alternative CDF-Based Estimator}
+\begin{block}{Geometric Combination of CDFs}
+\begin{equation}
+    H(x,\pi) = F(x,\hat{\theta})^{\pi}\,\hat{F}(x)^{\,1-\pi},
+\end{equation}
+\end{block}
+
+\begin{itemize}
+    \item $F(x,\hat{\theta})$: Parametric cumulative distribution function.
+    \item $\hat{F}(x)$: Empirical or nonparametric CDF.
+    \item Ensures a valid distribution function.
+    \item Provides an alternative compromise between the two approaches.
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Estimation of the Mixing Parameter}
+\begin{itemize}
+    \item The parameter $\hat{\theta}$ is obtained via maximum likelihood.
+    \item The mixing parameter $\pi$ is chosen to minimize the expected Hellinger distance between $g(x,\pi)$ and the true density.
+    \begin{equation}
+        H^2(f,g) = \frac{1}{2} \int \left(\sqrt{f(x)} - \sqrt{g(x,\pi)}\right)^2 dx.
+    \end{equation}
+    \item Asymptotic behavior:
+    \begin{itemize}
+        \item If the parametric model is correct, $\pi \to 1$.
+        \item If the model is misspecified, $\pi \to 0$.
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
