@@ -1,0 +1,160 @@
+\section{Clustering}
+\begin{frame}{\hspace{3cm}}
+\centering
+
+\vspace{1.5cm}
+
+\begin{beamercolorbox}[sep=20pt,center,rounded=true,shadow=true]{title}
+    {\fontsize{20}{24}\selectfont \textbf{Clustering}}
+\end{beamercolorbox}
+
+\vspace{0.8cm}
+
+
+\vfill
+
+\end{frame}
+%------------------------------------------------
+\begin{frame}{What does clustering stand for?}
+
+\begin{block}{Clustering}
+The clustering process aims at grouping together points having high similarity, 
+placing those with large dissimilarity into different groups.
+\end{block}
+
+\vspace{0.3cm}
+
+\begin{columns}
+
+\column{0.45\textwidth}
+\textbf{Various Types of Clustering}
+\begin{itemize}
+    \item Traditional Approaches
+    \begin{itemize}
+    \item Partition-based
+    \item Distance-based
+    \item Grid-based
+     \end{itemize}
+    \item Model-based
+    \item Density-based
+\end{itemize}
+
+\end{columns}
+
+\end{frame}
+\begin{frame}{Model-Based Clustering}
+
+In model-based clustering, a finite mixture of parametric distributions is introduced. More precisely, the random vector $X$ is considered to be a mixture of $J$ sub-populations.
+
+\vspace{0.3cm}
+
+\begin{block}{Density Model}
+\[
+f(x)= \sum_{j=1}^{J} \pi_j f_j(x)
+\]
+\end{block}
+
+where $f_{j}$ denotes the density of the $j$-th sub-population and $\pi_{j}$ represents its relative weight.
+
+\vspace{0.3cm}
+
+In this framework, a cluster is associated with each component $f_{j}$, and any observation $x_{0}$ is allocated to the cluster with the maximal density $f_{j}(x_{0})$ among the $J$ components.
+
+\end{frame}
+\begin{frame}{Model-Based Clustering: Drawbacks}
+
+\begin{alertblock}{Limitations}
+\begin{itemize}
+    \item To render the estimation problem identifiable, some restrictions must be placed on the components.
+    \item The number of components should be determined in advance.
+    \item If the cluster shapes do not match those of the components $f_j$, the model-based approach may face difficulties.
+\end{itemize}
+\end{alertblock}
+
+\end{frame}
+\begin{frame}{Density-Based Clustering}
+
+The mechanism behind density-based clustering is to associate groups with \textbf{connected regions of the density}.
+
+\vspace{0.3cm}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{WhatsApp Image 2026-04-10 at 15.40.08.jpeg}
+\end{figure}
+
+\vspace{0.3cm}
+
+
+\textbf{Key Idea}
+\begin{itemize}
+    \item Clusters correspond to \textbf{high-density regions (modes)}
+    \item Separation occurs in \textbf{low-density areas}
+\end{itemize}
+
+\end{frame}
+\begin{frame}{Kernel Density Estimation (KDE)}
+
+Suppose that $X_1, \ldots, X_n$ is a random sample from a density $f$.
+
+\vspace{0.3cm}
+
+\begin{exampleblock}{KDE Formula}
+\[
+\hat{f}(x) = \frac{1}{n} \sum_{i=1}^{n} \frac{1}{h} \, \kappa\!\left(\frac{x - X_i}{h}\right)
+\]
+\end{exampleblock}
+
+\vspace{0.3cm}
+
+\textbf{Components}
+\begin{itemize}
+    \item $\kappa(\cdot)$: kernel function
+    \item $h$: bandwidth (controls smoothness)
+\end{itemize}
+
+\end{frame}
+\begin{frame}{The Non-Parametric pdfCluster}
+\begin{itemize}
+    \item \textbf{Azzalini and Torelli (2007):} Proposed a \textit{density-based clustering} procedure based on \textit{Kernel Density Estimation (KDE)}. The method exploits \textit{spatial tessellation} to generalize the concept of \textit{adjacency} in multidimensional spaces and to identify \textit{connected level sets}. Clusters are defined as \textit{maximally connected components} of regions where the estimated density exceeds a given threshold.
+
+    \item \textbf{Limitation:} The algorithm is computationally feasible only for \textit{low to moderate dimensional data} (typically up to dimension 6).
+
+    \item \textbf{Menardi and Azzalini (2014):} Extended the methodology by providing an improved approach for detecting \textit{connected high-density regions} in \textit{higher-dimensional spaces}.
+
+    \item \textbf{Implementation:} Both methods are unified into a single algorithm and implemented in the R package \texttt{pdfCluster} (Azzalini and Menardi, 2014).
+\end{itemize}
+    
+\end{frame}
+
+\begin{frame}{Types of Clustering Approach}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.71\linewidth]{Screenshot 2026-04-11 005427.png}
+    \caption{Enter Caption}
+    \label{fig:placeholder}
+\end{figure}
+\end{frame}
+\begin{frame}{Why Asymmetric Kernel?}
+    \begin{itemize}
+    \item Classical kernel methods are based on symmetric densities, typically centered around zero, as in the case of the normal kernel.
+
+    \item However, a deficiency arises when such kernels are used to estimate densities whose supports are bounded \textit{[Marron and Ruppert (1994)]}.
+
+    \item On the other hand, asymmetric kernel methods never assign weight outside the support of the density. As a result, they effectively address the boundary bias problem \textit{[Saulo et al., 2013]}.
+
+    \item Density estimators in moderately-sized samples tend to inherit the salient properties of their kernels. Thus, if a density is suspected to be highly skewed, it is more appropriate to use asymmetric kernels rather than symmetric ones \textit{[Abadir and Lawford (2004)]}.
+\end{itemize}
+
+\end{frame}
+\begin{frame}{Proposed Approach: The Semi-Parametric pdfcluster}
+\begin{itemize}
+    \item Our main goal in this work is to improve the density estimation component of the pdfCluster algorithm \textit{[Azzalini and Menardi (2014)]} by utilizing skew-symmetric kernels instead of the normal and $t_7$ kernels.
+
+    \item As the terminology suggests, skew-symmetric (or skew-modulated) distributions are capable of generating both symmetric and asymmetric densities; see, for example, \textit{[Salehi and Azzalini (2018)]}.
+
+    \item Among the many distributions in this family, the skew-normal and skew-$t$ distributions—being the most well-known members—are sufficiently flexible to be employed as kernels in kernel density estimation (KDE).
+\end{itemize}
+    
+\end{frame}
+%-------------------------
