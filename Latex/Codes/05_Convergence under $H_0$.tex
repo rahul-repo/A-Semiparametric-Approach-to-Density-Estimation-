@@ -1,0 +1,186 @@
+\section{Convergence under $H_0$}
+\begin{frame}{\hspace{3cm}}
+\centering
+
+\vspace{1.5cm}
+
+\begin{beamercolorbox}[sep=20pt,center,rounded=true,shadow=true]{title}
+    {\fontsize{20}{24}\selectfont \textbf{Convergence under $H_0$}}
+\end{beamercolorbox}
+
+\vspace{0.8cm}
+
+
+\vfill
+
+\end{frame}
+%------------------------------------------------
+
+\begin{frame}{Setup under $H_0$}
+\begin{itemize}
+    \item Assume parametric model is true:
+    \[
+    f(x) = f(x,\theta_0)
+    \]
+
+    \item Semiparametric estimator:
+    \[
+    g(x,\pi)=\pi f(x,\hat{\theta})+(1-\pi)\hat{f}(x)
+    \]
+
+    \item Goal:
+    \begin{itemize}
+        \item Show $g(x,\hat{\pi})$ behaves like MLE
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Theorem under $H_0$}
+\textbf{Theorem:}
+\[
+\sqrt{n} \int |g(x,\hat{\pi}) - f(x,\theta_0)| dx = O_p(1)
+\]
+
+\begin{itemize}
+    \item Achieves parametric convergence rate
+    \item Equivalent to MLE asymptotically
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Taylor Expansion Idea}
+\begin{itemize}
+    \item Consider score function:
+    \[
+    \frac{\partial \log \tilde L(x,\pi)}{\partial \pi}
+    \]
+
+    \item Expand around:
+    \[
+    \pi = 1, \quad \theta = \theta_0
+    \]
+
+    \item First-order terms:
+    \begin{itemize}
+        \item Determine convergence of $\hat{\pi}$
+    \end{itemize}
+
+    \item Second-order terms:
+    \begin{itemize}
+        \item Asymptotically negligible
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Likelihood Properties}
+\begin{itemize}
+    \item $log \tilde L(x, \pi)$ is a strictly concave function of $\pi$ with probability 1
+
+    \item Therefore:
+    \begin{itemize}
+        \item $\hat{\pi}$ exists
+        \item $\hat{\pi}$ is unique (a.s.)
+    \end{itemize}
+
+    
+    \item The validity of the Taylor expansion depends on $\hat{\pi} \neq 0$. 
+It can be proven that 
+\[
+\Pr\{\hat{\pi} = 0\} \to 0 \quad \text{as } n \to \infty.
+\]
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Expansion Structure}
+A Taylor expansion of a $\frac{\partial \log \tilde L(x,\pi)}{\partial \pi}$ about $\pi = 1$ and $\theta = \theta_0$ (evaluated at $\hat\pi$) gives:
+\begin{itemize}
+    \item 
+\small
+\[
+0 = \sum \frac{f(x_i,\theta_0) - \hat{f}(x_i)}{f(x_i,\theta_0)}
+\]
+
+\[
+- (\pi - 1)\sum \frac{\left(f(x_i,\theta_0) - \hat{f}(x_i)\right)^2}{f(x_i,\theta_0)}
+\]
+
+\[
+- \sum \frac{f(x_i,\theta_0) - \hat{f}(x_i)}{f(x_i,\theta_0)}
+(\hat{\theta} - \theta_0)
+\left(
+\frac{\nabla_\theta f(x_i,\theta_0)}{f(x_i,\theta_0)}
+\right)^T
+\]
+
+\[
++ (\hat{\theta} - \theta_0)\sum
+\left(
+\frac{\nabla_\theta f(x_i,\theta_0)}{f(x_i,\theta_0)}
+\right)^T
++ \text{higher-order terms}
+\]
+\normalsize
+
+
+    \item First-order term:
+    \begin{itemize}
+        \item Controls convergence rate
+    \end{itemize}
+
+    \item Higher-order terms:
+    \begin{itemize}
+        \item $o_p(1)$
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Result for $\hat{\pi}$}
+\begin{itemize}
+    \item From expansion it can be shown:
+    \[
+    \hat{\pi}-1 = O_p\left(\frac{1}{\sqrt{n}a_n}\right)
+    \]
+
+    \item Therefore:
+    \[
+    \hat{\pi} \to 1
+    \]
+
+    \item Parametric model dominates
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Conclusion under $H_0$}
+\begin{itemize}
+    \item Writing $
+g(x,\hat\pi) - f(x,\theta_0) 
+= \hat\pi \big[ f(x,\hat\theta) - f(x,\theta_0) \big] 
++ (1 - \hat\pi)\big[ \hat f(x) - f(x,\theta_0) \big].
+$ and applying triangle inequality on  $
+    \int |g(x,\hat{\pi}) - f(x,\theta_0)| dx 
+    $  
+
+    we get:
+    \[
+    \int |g(x,\hat{\pi}) - f(x,\theta_0)| dx = O_p(n^{-1/2})
+    \]
+
+    \item \textbf{Conclusion:}
+    \begin{itemize}
+        \item Same behavior as parametric estimator
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
