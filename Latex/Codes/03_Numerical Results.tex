@@ -1,0 +1,179 @@
+%------------------------------------------------
+\section{Numerical Results}
+\begin{frame}{\hspace{3cm}}
+\centering
+
+\vspace{1.5cm}
+
+\begin{beamercolorbox}[sep=20pt,center,rounded=true,shadow=true]{title}
+    {\fontsize{20}{24}\selectfont \textbf{Numerical Results}}
+\end{beamercolorbox}
+
+\vspace{0.8cm}
+
+
+\vfill
+
+\end{frame}
+
+%------------------------------------------------
+
+%------------------------------------------------
+\begin{frame}{Purpose of Numerical Examples}
+\begin{itemize}
+    \item Illustrate the practical performance of the semiparametric density estimator.
+    \item Nonparametric component constructed using a \textbf{Gaussian kernel}.
+    \item Bandwidth $b$ is selected prior to estimating the mixing parameter $\pi$.
+    \item Two datasets are analyzed:
+    \begin{itemize}
+        \item Yearly maximum wind speed data.
+        \item Magnesium concentration in milk powder.
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Semiparametric Density Estimator}
+\begin{block}{Convex Combination}
+\begin{equation}
+    g(x,\pi) = \pi f(x,\hat{\theta}) + (1-\pi)\hat{f}(x), 
+    \qquad 0 \leq \pi \leq 1.
+\end{equation}
+\end{block}
+
+\begin{itemize}
+    \item $f(x,\hat{\theta})$: Parametric density with parameters estimated by maximum likelihood.
+    \item $\hat{f}(x)$: Kernel density estimator.
+    \item $\pi$: Mixing parameter estimated numerically.
+    \item Interpretation:
+    \begin{itemize}
+        \item $\pi = 1$: Purely parametric estimator.
+        \item $\pi = 0$: Purely nonparametric estimator.
+        \item $0 < \pi < 1$: Compromise between the two.
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Gaussian Kernel Density Estimator}
+\begin{block}{Kernel Estimator}
+\begin{equation}
+    \hat{f}(x) = \frac{1}{n b} \sum_{i=1}^{n} 
+    K\!\left(\frac{x - x_i}{b}\right),
+    \qquad 
+    K(u) = \frac{1}{\sqrt{2\pi}} e^{-u^2/2}.
+\end{equation}
+\end{block}
+
+\begin{itemize}
+    \item $b$: Bandwidth controlling the smoothness of $\hat{f}(x)$.
+    \item A reasonable choice of $b$ is assumed before estimating $\pi$.
+    \item The semiparametric estimate tends to:
+    \begin{itemize}
+        \item The nonparametric estimator as $b \to 0$.
+        \item The parametric estimator as $b \to \infty$.
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Pseudolikelihood for Estimating $\pi$}
+\begin{block}{Pseudolikelihood Function}
+\begin{equation}
+    \tilde{L}(\pi) = 
+    \prod_{i=1}^{n}
+    \left[
+        \pi f(x_i,\hat{\theta}) + (1-\pi)\hat{f}(x_i)
+    \right],
+\end{equation}
+\end{block}
+
+\begin{itemize}
+    \item The estimate $\hat{\pi}$ maximizes $\tilde{L}(\pi)$.
+    \item Ensures stability and avoids bias from self-influence.
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Example 1: Wind Speed Data}
+\begin{itemize}
+    \item Data: Yearly maximum wind speeds (North direction) from Sheridan, Wyoming.
+    \item Sample size: $n = 20$ with observations:
+    \[
+    70,\,61,\,61,\,60,\,61,\,63,\,61,\,67,\,61,\,62,\,47,\,67,\,61,\,49,\,55,\,65,\,57,\,51,\,47,\,56.
+    \]
+    \item Parametric model: \textbf{Gumbel distribution} with unknown location and scale.
+    \item The pseudolikelihood function $\tilde{L}(\pi)$ attains its maximum at:
+    \[
+        \hat{\pi} \approx 0.8.
+    \]
+    \item Interpretation: The parametric model provides a good fit to the data.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Maximum of the Pseudolikelihood (b =.7s) for Wind Speed Data. }
+    \begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{Screenshot 2026-04-14 205716.png}
+    \label{fig:placeholder}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Density Estimates for Wind Speed Data (case: $b = 0.7s$)}
+    \begin{columns}[c]
+        % Left column: Image
+        \column{0.6\textwidth}
+        \begin{figure}
+            \centering
+            \includegraphics[width=\linewidth]{image.png}
+        \end{figure}
+
+        % Right column: Description
+        \column{0.4\textwidth}
+        
+        \vspace{0.3cm}
+        \begin{itemize}
+            \item \textbf{Dotted-and-dashed line:} Nonparametric density estimate
+            \item \textbf{Dashed line:} Parametric density estimate
+            \item \textbf{Solid line:} Semiparametric density estimate
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
+
+%------------------------------------------------
+\begin{frame}{Example 2: Magnesium in Milk Powder}
+\begin{itemize}
+    \item Data: 22 inductively coupled plasma spectroscopy measurements (micrograms per gram):
+    \[
+    1201.1,\,1213.3,\,1247.6,\,1177.1,\,1248.9,\,1224.1,\,1240.5,\,1168.4,\,1204.4,1210.1,\,1206.5,\\\hspace{10 mm}1210.0,\,1185.6,\,1177.7,\,1265.7,\,1186.4,\,1256.7,\,1202.3,
+    1213.7,\,1186.3,\,1204.9,\,1196.7.
+    \]
+    \item Parametric model: \textbf{Normal distribution} with unknown mean and variance.
+    \item As b tends to 0 the nonparametric and semiparametric estimates exhibit \textbf{multiple modes}, and this is an indication of difficulty with the measurement process that produced the data.
+    \item Interpretation: Indicates possible complexities or periodic trends in the measurement process.
+\end{itemize}
+\end{frame} 
+
+\begin{frame}{Maximum of the log Pseudolikelihood (b =.7s) for Magnesium in Milk Powder Data.}
+    \begin{figure}
+    \centering
+    \includegraphics[width=0.67\linewidth]{WhatsApp Image 2026-04-16 at 16.09.54.jpeg}
+    \label{fig:placeholder}
+\end{figure}
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Behavior of the Semiparametric Estimator}
+\begin{itemize}
+    \item The semiparametric estimator provides a compromise between parametric and nonparametric approaches.
+    \item Relationship with bandwidth $b$:
+    \begin{itemize}
+        \item $\pi = 0 \Rightarrow$ semiparametric estimate equals the nonparametric estimate with bandwidth $b=0.5s$.
+        \item $\pi = 1 \Rightarrow$ semiparametric estimate equals the parametric estimate with bandwidth $b=0.9s$.
+        \item As $b \to 0$, the estimator tends to the nonparametric density.
+        \item As $b \to \infty$, it approaches the parametric density.
+    \end{itemize}
+    \item This behavior parallels penalized likelihood methods for small and large penalties.
+\end{itemize}
+\end{frame}
