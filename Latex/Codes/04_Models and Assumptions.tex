@@ -1,0 +1,239 @@
+\section{Models and Assumptions}
+\begin{frame}{\hspace{3cm}}
+\centering
+
+\vspace{1.5cm}
+
+\begin{beamercolorbox}[sep=20pt,center,rounded=true,shadow=true]{title}
+    {\fontsize{20}{24}\selectfont \textbf{Models and assumption}}
+\end{beamercolorbox}
+
+\vspace{0.8cm}
+
+
+\vfill
+
+\end{frame}
+%------------------------------------------------
+
+\begin{frame}{Model Framework}
+Suppose that we observe $n$ i.i.d.\ $d$-dimensional observations 
+$X_i = (X_{1i}, \ldots, X_{di})$, \quad $i = 1, \ldots, n$.
+\begin{itemize}
+    \item Under an ideal physical model ($H_0$):
+    \begin{itemize}
+        \item Observations $X_i$ have density:
+        \[
+        f(x_i, \theta)
+        \]
+        \item $\theta = (\theta_1, \dots, \theta_k) \in \mathbb{R}^k$
+        \item $\theta$ is unknown and estimated from data
+    \end{itemize}
+
+    \vspace{0.3cm}
+
+    \item Under less ideal conditions ($H_A$):
+    \begin{itemize}
+        \item True density is:
+        \[
+        f(x_i)
+        \]
+        \item No parametric form assumed
+        \item Must be estimated from the data
+    \end{itemize}
+
+    \vspace{0.3cm}
+
+    \item Due to generality of the procedure, several \textbf{regularity and rate assumptions} are required
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Likelihood and Estimation}
+\begin{itemize}
+    \item Parameter $\theta_0$ estimated using MLE:
+    \[
+    \prod_{i=1}^n f(x_i,\hat\theta) = \max_{\theta} \prod_{i=1}^n f(x_i,\theta)
+    \]
+
+    \item Nonparametric estimator (kernel density):
+    \[
+    \hat{f}(z) = \frac{1}{n b^d} \sum K\left(\frac{x_i - z}{b}\right)
+   \]
+
+    \item Semiparametric estimator:
+    \[
+    g(x,\pi) = \pi f(x,\hat\theta) + (1-\pi)\hat{f}(x), \quad 0 \leq \pi \leq 1
+    \]
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Assumptions on MLE}
+\begin{itemize}
+    \item \textbf{Consistency and rate of convergence:}
+
+    \[
+    n \mathbb{E}\|\hat{\theta} - \theta_0\|^2 = O(1) \quad \text{under } H_0
+    \]
+
+    \[
+    n \mathbb{E}\|\hat{\theta} - \theta_A\|^2 = O(1) \quad \text{under } H_A
+    \]
+
+    \item Interpretation:
+    \begin{itemize}
+        \item $\hat{\theta}$ converges, at $\sqrt{n}$ rate, to $\theta_0$ under $H_0$ and to $\theta_A$ under $H_A$.
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Likelihood Ratio Assumptions}
+Under $H_0$,
+\begin{equation}
+\sqrt{n}\,\mathbb{E}\{\tfrac{\sqrt{f(X_i,\hat\theta)} - \sqrt{f(X_i,\theta_0)}}{\sqrt{f(X_i,\hat\theta)}} \}^2 = O(1).
+\tag{a}
+\end{equation}
+
+Under $H_A$,
+\begin{equation}
+\sqrt{n}\,\mathbb{E}\{\tfrac{\sqrt{f(X_i,\hat\theta)} - \sqrt{f(X_i,\theta_A)}}{\sqrt{f(X_i,\hat\theta)}} \}^2 = O(1).
+\tag{b}
+\end{equation}
+
+As $n \to \infty$,
+\begin{equation}
+f(X_i,\hat\theta) \xrightarrow{L_2} f(X_i,\theta_0) \quad \text{under } H_0, 
+\qquad 
+f(X_i,\hat\theta) \xrightarrow{L_2} f(X_i,\theta_A) \quad \text{under } H_A.
+\tag{c}
+\end{equation}
+
+Assumptions (a) and (b) require the expected likelihood ratios to converge to $1$ at the usual rates; (c) requires $L_2$ convergence of $f(x,\theta)$ to its limit.
+
+In addition, we require conditions on the densities: $f(x)$ and $f(x,\theta)$ have compact support and
+\[
+\inf_x f(x) > \varepsilon, 
+\qquad 
+\inf_{x,\theta} f(x,\theta) > \varepsilon,
+\]
+where $\varepsilon$ is known. In other words, we require that the underlying density has compact support and is bounded below.
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Regularity Conditions }
+\begin{itemize}
+    \item Smoothness:
+    
+    $f(x,\theta)$ is twice continuously differentiable in each argument. 
+    
+    The derivative can be taken under the integral sign.
+
+
+    \item Boundedness:
+    \[
+    \sup_x |f(x)| < M
+    \]
+
+    \end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Kernel Density Assumptions}
+To provide some protection against the possibility that the data come from $H_A$ we use a common nonparametric kernel density estimate
+\begin{itemize}
+    \item Kernel estimator:
+    \[
+    \hat{f}(z) = \frac{1}{n b^d} \sum K\left(\frac{x_i - z}{b}\right)
+    \]
+where z is the point at which the density is to be estimated, K(x) is a specified density on $R^d$ and is a continuous kernel with compact support
+    \item Conditions on bandwidth:
+    \[
+    b \to 0, \quad n b^{2d} \to \infty
+    \]
+
+    \item Ensures:
+    \begin{itemize}
+        \item Consistency
+        \item Almost sure convergence
+    \end{itemize}
+
+    \item . It has been shown (Devroye 1983) that $\hat f(x)$ is an $L_1$ consistent estimate of $f(x)$.
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Non-parametric Rate Assumptions }
+\begin{itemize}
+    \item Mean square convergence:
+    \[
+    \mathbb{E}\left[
+    \frac{\hat{f}(X_i) - f(X_i)}{f(X_i)}
+    \right]^2 = O(a_n^2)
+    \]
+
+    \item Where:
+    \begin{itemize}
+    \item $a_n$ related to bandwidth b
+        \item $a_n \to 0$
+        \item $a_n n^{\alpha/2} \to \infty$ for some $\alpha$ between 0 and 1
+        \item $f(x_i)$ is $f(x_i, \theta_0)$ when $H_0$ is true and $f(x_i)$ is the true density when $H_A$ is true.
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Cross-Product Conditions}
+\begin{itemize}
+    \item Under $H_0$:
+    \[
+    \int [\hat{f}(x_i)-f(x_i, \theta_0)][\hat{f}(x_j)-f(x_j,\theta_0)] dx_i dx_j
+    = O_p\left(\frac{a_n^2}{n}\right)\quad \text{for}\quad i\neq j
+    \]
+
+    \item Under $H_A$:
+    \[
+    \int [\hat{f}(x_i)-f(x_i)][\hat{f}(x_j)-f(x_j)] dx_i dx_j
+    = O_p\left(\frac{a_n^2}{n}\right)\quad \text{for}\quad i \neq j 
+    \]
+
+    \item Interpretation:
+    \begin{itemize}
+        \item Controls dependence between estimation errors
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Key Idea of the Model}
+\begin{itemize}
+    \item Final estimator:convex combination of the parametric and non-parametric estimates
+    \[
+    g(x,\pi) = \pi f(x,\hat{\theta}) + (1-\pi)\hat{f}(x)
+    \]
+
+    \item The parameter $\pi$ is unknown and its estimate $\hat{\pi}$ is obtained from the data, so that $g(x,\hat\pi)$ is the actual density estimate. 
+
+Let
+\[
+\tilde L(\mathbf{x},\pi) = \prod_{i=1}^n g(x_i,\pi)
+\]
+denote the pseudolikelihood function from which we choose a pseudomaximum likelihood estimate $\hat{\pi}$ for $\pi$ that satisfies
+\[
+\tilde L(\mathbf{X},\hat{\pi}) = \prod_{i=1}^n g(x_i,\hat{\pi})
+= \max_{\pi} \prod_{i=1}^n g(x_i,\pi).
+\]
+
+    \item Interpretation:
+    When $H_0$ holds the chosen density should be close to $f(x,\theta_0)$, and when $H_A$ holds the density should be close to $f(x)$.
+\end{itemize}
+\end{frame}
