@@ -1,0 +1,234 @@
+\section{Semi Parametric KDE}
+\begin{frame}{\hspace{3cm}}
+\centering
+
+\vspace{1.5cm}
+
+\begin{beamercolorbox}[sep=20pt,center,rounded=true,shadow=true]{title}
+    {\fontsize{20}{24}\selectfont \textbf{Semi-Parametric KDE}}
+\end{beamercolorbox}
+
+\vspace{0.8cm}
+
+
+\vfill
+
+\end{frame}
+%------------------------------------------------
+\begin{frame}{Semi-Parametric KDE}
+Suppose that 
+\[
+X := (X_1, \ldots, X_d), \quad i = 1, \ldots, n,
+\]
+is a random sample of size $n$ from a $d$-dimensional density function, and let 
+\[
+\mathbf{X}_i = (X_{i1}, \ldots, X_{id})
+\]
+be an observation.
+
+\textit{Azzalini and Menardi (2014)} performed the density estimation step of their clustering algorithm using a kernel method based on a product kernel estimator of the form:
+\begin{equation}
+\hat{f}(\mathbf{x}) = \frac{1}{n} \sum_{i=1}^{n} \prod_{j=1}^{d} \frac{1}{h_{ij}} \, \kappa\!\left( \frac{x_j - X_{ij}}{h_{ij}} \right),
+\end{equation}
+where
+\[
+\mathbf{x} = (x_1, \ldots, x_d),
+\]
+$\kappa(\cdot)$ is a symmetric kernel (e.g., normal or $t_7$ as used in \texttt{pdfCluster}), and $h_{ij}$ denotes the bandwidth corresponding to $X_{ij}$ for $i = 1, \ldots, n$ and $j = 1, \ldots, d$.
+    
+\end{frame}
+\begin{frame}{Proposed Skew-Symmetric Kernel Estimator}
+Here, we intend to employ a product kernel of the following form:
+\begin{equation}
+\hat{f}(\mathbf{x}) = \frac{1}{n \, h_1 \cdots h_d} \sum_{i=1}^{n} \prod_{j=1}^{d} 
+\kappa_j \!\left( \frac{x_j - X_{ij}}{h_j} \right),
+\end{equation}
+where $\kappa_j(\cdot)$ can be either a skew-normal density or a skew-$t$ density.
+
+More precisely, in the skew-normal case, we have:
+\begin{equation}
+\kappa_j(z) = 2 \, \phi(z)\, \Phi(\lambda_j z), \quad z \in \mathbb{R},
+\end{equation}
+where $\lambda_j$, $j = 1, \ldots, d$, is the slant parameter, and $\phi(\cdot)$ and $\Phi(\cdot)$ denote the density and cumulative distribution function of the standard normal distribution, respectively.
+    
+\end{frame}
+\begin{frame}{Proposed Skew-Symmetric Kernel Estimator(Contd.)}
+Our second proposal for $\kappa_j(\cdot)$ is the standard skew-$t$ density given by:
+\begin{equation}
+\kappa_j(z) = 2 \, t(z; \nu_j)\, 
+T\!\left( \lambda_j z \sqrt{\frac{\nu_j + 1}{\nu_j + z^2}} \, ; \, \nu_j + 1 \right), 
+\quad z \in \mathbb{R},
+\end{equation}
+where $\lambda_j$ is the slant parameter and $\nu_j$, $j = 1, \ldots, d$, denotes the degrees of freedom.
+
+Here, $t(\cdot \, ; \, \nu)$ and $T(\cdot \, ; \, \nu)$ represent the density and cumulative distribution function of the classical Student's $t$ distribution with $\nu$ degrees of freedom, respectively.
+\end{frame}
+\begin{frame}{Our Algorithm}
+Let 
+\[
+\mathbf{z}_j := (Z_{1j}, \ldots, Z_{nj}).
+\]
+
+\begin{itemize}
+    \item Choose the desired kernel between (3) and (4).
+
+    \item For the skew-normal (SN) kernel, plug in $\lambda_j$ using its MPLE, assuming $\mathbf{z}_j$ is a random sample from (5). \textit{(A point on MPLE)}
+
+    \item For the skew-$t$ (ST) kernel, proceed as follows, assuming $\mathbf{z}_j$ is a random sample from (6):
+    \begin{itemize}
+        \item[(i)] For high dimensions: approximate $(\lambda_j, \nu_j)$ with quick preliminary estimates using \texttt{st.prelimFit}.
+        
+        \item[(ii)] For low dimensions: plug in $(\lambda_j, \nu_j)$ using their MPLEs via the routines \texttt{st.prelimFit} and \texttt{st.mple}.
+    \end{itemize}
+
+    \item Compute $\hat{f}(\mathbf{x})$ in (4) with $\kappa_j(\cdot)$ whose parameters are now approximated.
+
+    \item The only remaining ingredient is to determine an optimal bandwidth, which will be discussed in the next section.
+\end{itemize}
+    
+\end{frame}
+\begin{frame}{On finding optimum bandwidth}
+
+Suppose that $f(\cdot)$ is a univariate density function to be estimated using (2), considering $d = 1$.  
+Assume further that $\kappa(\cdot)$ is a one-dimensional asymmetric kernel density satisfying the following regularity assumptions:
+
+\vspace{0.4cm}
+
+\begin{block}{Regularity Assumptions}
+\begin{itemize}
+    \item[(A$_1$)] $z \in \mathbb{R}, \quad \kappa(z) \geq 0$
+    
+    \item[(A$_2$)] $\displaystyle \int \kappa(z)\,dz = 1$
+    
+    \item[(A$_3$)] $\displaystyle \int z\,\kappa(z)\,dz = \mu_1(\kappa) \neq 0$
+\end{itemize}
+\end{block}
+
+\end{frame}
+\begin{frame}{Optimal Bandwidth $h_{\text{opt}}$}
+
+Now, if we consider $\kappa(\cdot)$ to be the one given by (3), then $h_{\text{opt}}$ is obtained as a real value satisfying:
+
+\vspace{0.3cm}
+
+\begin{block}{Equation}
+\[
+-a + 2b\,h_{\text{opt}}^{3}(\lambda) + c\,h_{\text{opt}}^{5}(\lambda) = 0
+\tag{5}
+\]
+\end{block}
+where,
+
+
+\[
+a := \frac{1}{n}\left(2\pi^\frac{-3}{2}\arctan\!\left(\sqrt{1+\lambda^{2}}\right)\right)
+\]
+
+\[
+b := \frac{\lambda^{2}}{2\pi^{3/2}\,\sigma^{3}(1+\lambda^{2})}
+\]
+
+\[
+c := \frac{3}{8\pi^{1/2}\,\sigma^{5}}
+\tag{6}
+\]
+
+
+\end{frame}
+\begin{frame}
+\begin{figure}
+        \centering
+        \includegraphics[width= 0.63\linewidth]{Screenshot 2026-04-14 085621.png}
+        \label{fig:placeholder}
+    \end{figure}    
+\end{frame}
+\begin{frame}{Multi-dimensional Case}
+
+Assume $f(\mathbf{x})$ is a $d$-variate density. Then, the kernel density estimator in its most general form is defined as \\
+\textit{[Wand and Jones (1995)]}:
+
+\vspace{0.4cm}
+
+\begin{block}{Kernel Density Estimator}
+\[
+\hat{f}(\mathbf{x}) = \frac{1}{n} |\mathbf{H}|^{-1/2} \sum_{i=1}^{n} 
+K\!\left(\mathbf{H}^{-1/2}(\mathbf{x} - \mathbf{X}_i)\right)
+\tag{7}
+\]
+\end{block}
+
+\vspace{0.3cm}
+
+\begin{block}{Notation}
+\begin{itemize}
+    \item $\mathbf{x} = (x_1, \dots, x_d)$
+    \item $\mathbf{X}i = (X{i1}, \dots, X_{id}), \quad i = 1, \dots, n$
+    \item $\mathbf{H}$: bandwidth matrix (symmetric positive definite $d \times d$ matrix)
+    \item $K(\cdot)$: $d$-variate kernel density
+\end{itemize}
+\end{block}
+
+\end{frame}
+\begin{frame}{Theorem: AMISE in Multi-dimensional Case}
+
+\begin{block}{Theorem}
+Assume $h_j = h$, for $j = 1, \dots, d$. Then, the AMISE of $\hat{f}(\mathbf{x})$ has the form:
+\[
+\mathrm{AMISE}(\hat{f}) = \frac{1}{n h^{d}} \int t^{1/3}(x)\,dx \;+\; A\left(Bh^{2} + Ch^{4}\right)
+\tag{8}
+\]
+
+\end{block}
+where,
+\vspace{-3 mm}
+\[
+B := 8 \sum_{j=1}^{d} \mu_{1}^{2}(\kappa_j)\,\sigma_{j}^{-2}
+\]
+\vspace{-3 mm}
+\[
+A := (2\sqrt{\pi})^{-d} \prod_{j=1}^{d} \sigma_{j}^{-1}
+\]
+\vspace{-3 mm}
+\[
+C := 3 \sum_{j=1}^{d} \mu_{2}^{2}(\kappa_j)\,\sigma_{j}^{-4}
++ 2 \sum_{j<l} \left[
+\mu_{2}(\kappa_j)\mu_{2}(\kappa_l) 
++ \mu_{1}^{2}(\kappa_j)\mu_{1}^{2}(\kappa_l)
+\right]\sigma_{j}^{-2}\sigma_{l}^{-2}
+\]
+
+
+\end{frame}
+\begin{frame}
+Minimizing (8) gives the optimum bandwidth as the solution of the following non-linear equation
+\begin{equation}
+- \frac{d}{n} \prod_{j=1}^{d} \int \kappa_j^2(t)\, dt 
++ 2AB h_{\mathrm{opt}}^{d+2} 
++ 4AC h_{\mathrm{opt}}^{d+4} = 0,
+\tag{9}
+\end{equation}
+
+where constants $A$, $B$ and $C$ are given by (9). The unknown parameters $\sigma_j$ can be substituted by $s_j$, the sample standard deviation of the $j$th variable, and the $\lambda_j$ can be approximated by its MPLE.
+
+It can be easily shown that by setting $d = 1$ in (9), it simplifies to its univariate version given by (5).
+    
+\end{frame}
+\begin{frame}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{Screenshot 2026-04-14 100602.png}
+    \label{fig:placeholder}
+\end{figure}
+    
+\end{frame}
+\begin{frame}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{Screenshot 2026-04-14 103509.png}
+    \label{fig:placeholder}
+\end{figure}
+    
+\end{frame}
+
+
+%-------------------------------
