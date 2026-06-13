@@ -1,0 +1,133 @@
+\section{Convergence under $H_A$}
+\begin{frame}{\hspace{3cm}}
+\centering
+
+\vspace{1.5cm}
+
+\begin{beamercolorbox}[sep=20pt,center,rounded=true,shadow=true]{title}
+    {\fontsize{20}{24}\selectfont \textbf{Convergence under $H_A$}}
+\end{beamercolorbox}
+
+\vspace{0.8cm}
+
+
+\vfill
+
+\end{frame}
+%------------------------------------------------
+
+\begin{frame}{Setup under $H_A$}
+\begin{itemize}
+    \item True model is nonparametric:
+    \[
+    f(x) \neq f(x,\theta)
+    \]
+
+    \item Goal:
+    \begin{itemize}
+        \item Show estimator behaves like kernel estimator
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Theorem under $H_A$}
+\small
+\textbf{Theorem 2.} Under the assumptions stated previously
+\[
+\left|
+\frac{f(x_i,\theta_A) - f(x_i,\hat{\theta})}{f(x_i,\theta_A)}
+\right|
+\leq
+|\hat{\theta} - \theta_A| R(x_i),
+\]
+where $E[R(X_i)]^2 < \infty$. Then
+\[
+a_n^{-1} \int |g(x,\hat{\pi}) - f(x)| \, dx = O_p(1).
+\tag{d}
+\]
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Proof Idea}
+\small
+\textbf{Proof.} To prove (d), we show that
+\[
+\frac{1}{n} \sum \log g(x_i,\pi)
+=
+- O\left(
+\int \left|\sqrt{g_A(x,\pi)} - \sqrt{f(x)}\right|^2 dx
+\right)
++ O_p(a_n^2),
+\tag{e}
+\]
+where
+\[
+g_A(x,\pi) = \pi f(x,\theta_A) + (1-\pi) f(x).
+\]
+
+\vspace{0.3cm}
+
+\begin{itemize}
+    \item Result (e) is stronger than (d)
+    \item $\hat{\pi}$ maximizes (e)
+    \item Equivalent to minimizing Hellinger distance
+\end{itemize}
+\end{frame}
+%------------------------------------------------
+
+\begin{frame}{Step 1}
+\begin{itemize}
+    \item Show:
+    \[
+    \frac{1}{n}\sum \log g(x_i,\pi)
+    =
+    \mathbb{E}[\log g_A(X,\pi)] + O_p(n^{-1/2})
+    \]
+
+    \item Method:
+    \begin{itemize}
+        \item Taylor expansion around $\theta_A$
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Step 2}
+\begin{itemize}
+    \item Show:
+    \[
+    \mathbb{E}[\log g_A(X,\pi)]
+    =
+    -O\Big(\int (\sqrt{g(x,\pi)}-\sqrt{f(x)})^2 dx\Big)
+    \]
+
+    \item Interpretation:
+    \begin{itemize}
+        \item Hellinger distance
+    \end{itemize}
+
+\textbf{Step 1} and \textbf{Step 2} together imply that 
+\[
+\hat{\pi} = O_p(n^{-1/4}).
+\]
+By iterating this process we ultimately achieve (e).
+
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Final Result}
+\begin{itemize}
+    \item Using the expansion of $
+H(\pi) = \frac{1}{\sqrt{n}} \sum \left[ \log g_A(x_i,\pi) - E \log g_A(X,\pi) \right].
+$ about $\pi = 0$ and using an iterating argument from previous calculations(from which we know that $\hat\pi = O_p(max(a_n,n^{-1/2}))$), it can be shown $\hat\pi = O_p(a_n)$ provided that $a_n n^{\alpha/2} \to \infty $ for some $0<\alpha<1$.
+
+    \item Hence, Non-parametric model dominates.
+    
+\end{itemize}
+\end{frame}
